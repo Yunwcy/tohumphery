@@ -20,11 +20,25 @@
             padding: 0;
             box-sizing: border-box;
         }
+        html {
+            font-size: 20px;
+        }
         body {
             font-family: 'ChenYuLuoYan', 'Noto Sans TC', 'Arial', sans-serif;
+            font-size: 1rem;
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             min-height: 100vh;
             overflow-x: hidden;
+        }
+        h1 {
+            font-size: 2.5rem;
+        }
+        h2 {
+            font-size: 2rem;
+        }
+        p {
+            font-size: 1.3rem;
+            line-height: 1.8;
         }
 
         /* 寶箱動畫 */
@@ -104,7 +118,7 @@
 
         .click-hint {
             color: #FFD700;
-            font-size: 18px;
+            font-size: 20px;
             margin-top: 180px;
             text-align: center;
             animation: pulse 2s ease-in-out infinite;
@@ -454,6 +468,10 @@
 
         /* 響應式設計 */
         @media (max-width: 768px) {
+            body {
+                font-size: 18px;
+            }
+            
             .hero-title {
                 font-size: 2em;
             }
