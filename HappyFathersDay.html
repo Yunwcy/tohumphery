@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <title>給爸爸的生日禮物 - Humphery Wu</title>
+    <style>
+        @font-face {
+            font-family: 'ChenYuLuoYan';
+            src: url('fonts/ChenYuLuoYan.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+          }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 寶箱動畫 */
+        .treasure-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease-out;
+        }
+
+        .treasure-box {
+            width: 200px;
+            height: 150px;
+            position: relative;
+            cursor: pointer;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+
+        .treasure-box:hover {
+            transform: scale(1.1);
+        }
+
+        .box-base {
+            width: 200px;
+            height: 100px;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+            border: 3px solid #654321;
+        }
+
+        .box-lid {
+            width: 200px;
+            height: 60px;
+            background: linear-gradient(45deg, #A0522D, #CD853F);
+            border-radius: 10px 10px 5px 5px;
+            position: absolute;
+            top: 0;
+            border: 3px solid #654321;
+            transform-origin: bottom;
+            animation: lidPulse 2s ease-in-out infinite;
+        }
+
+        .box-lock {
+            width: 30px;
+            height: 30px;
+            background: #FFD700;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #FFA500;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 30%; right: 20%; animation-delay: 0.3s; }
+        .sparkle:nth-child(3) { bottom: 20%; left: 30%; animation-delay: 0.6s; }
+
+        .click-hint {
+            color: #FFD700;
+            font-size: 18px;
+            margin-top: 180px;
+            text-align: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes lidPulse {
+            0%, 100% { transform: rotateX(0deg); }
+            50% { transform: rotateX(-5deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .treasure-opened {
+            animation: openTreasure 1s ease-out forwards;
+        }
+
+        @keyframes openTreasure {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(-120deg); }
+        }
+
+        /* 主要內容 */
+        .main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        .main-content.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #B0E0E6 0%, #87CEEB 100%);
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        /* 想說的話 */
+        .message-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #E0F6FF 0%, #B8E6FF 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #2d3748;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .message-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .message-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.6s ease;
+        }
+
+        .message-card.animate {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .message-card h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .message-card p {
+            color: #718096;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #ADD8E6 0%, #87CEEB 100%);
+        }
+
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #4a5568;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 50px 0;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item:nth-child(even) {
+            transform: translateX(50px);
+        }
+
+        .timeline-item:nth-child(even).animate {
+            transform: translateX(0);
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            width: 45%;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 55%;
+        }
+
+        .timeline-date {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #4a5568;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .timeline-content h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .timeline-content p {
+            color: #718096;
+            line-height: 1.5;
+        }
+
+        /* 照片輪播 */
+        .gallery-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #B0E0E6 0%, #4682B4 100%);
+        }
+
+        .photo-carousel {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .photo-container {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-slide {
+            min-width: 100%;
+            height: 400px;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #666;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .photo-slide .photo-placeholder {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #4682B4;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-btn.prev {
+            left: 15px;
+        }
+
+        .carousel-btn.next {
+            right: 15px;
+        }
+
+        .carousel-dots {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            display: inline-block;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        /* 鼓勵短句 */
+        .encouragement-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #4682B4 0%, #191970 100%);
+            text-align: center;
+        }
+
+        .encouragement-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .encouragement-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .encouragement-icon:hover {
+            transform: scale(1.15);
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+        }
+
+        .encouragement-text {
+            margin-top: 30px;
+            font-size: 1.3em;
+            color: white;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .encouragement-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 動畫 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2em;
+            }
+            
+            .section-title {
+                font-size: 2em;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+            }
+            
+            .timeline-date {
+                left: 30px;
+            }
+            
+            .encouragement-icons {
+                gap: 20px;
+            }
+            
+            .encouragement-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 寶箱動畫 -->
+    <div class="treasure-overlay" id="treasureOverlay">
+        <div>
+            <div class="treasure-box" id="treasureBox">
+                <div class="box-lid" id="boxLid"></div>
+                <div class="box-base"></div>
+                <div class="box-lock"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+            </div>
+            <div class="click-hint">點擊寶箱打開驚喜！</div>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content" id="mainContent">
+        <!-- 英雄區塊 -->
+        <section class="hero-section">
+            <h1 class="hero-title">生日快樂！</h1>
+            <p class="hero-subtitle">給最愛的爸爸 Humphery Wu 的特別禮物</p>
+        </section>
+
+        <!-- 想說的話 -->
+        <section class="message-section">
+            <h2 class="section-title">想對爸爸說的話</h2>
+            <div class="message-cards">
+                <div class="message-card">
+                    <h3>感謝您的愛與支持</h3>
+                    <p>親愛的爸爸，謝謝您一直以來的無私付出和支持。您的愛讓我有勇氣面對人生的每個挑戰，您的智慧指引著我前進的方向。</p>
+                </div>
+                <div class="message-card">
+                    <h3>您是我的榜樣</h3>
+                    <p>您的堅毅、善良和責任感深深影響著我。您不僅是我的父親，更是我學習的榜樣。希望我能成為像您一樣優秀的人。</p>
+                </div>
+                <div class="message-card">
+                    <h3>永遠愛您</h3>
+                    <p>無論我走到哪裡，您的愛永遠是我最溫暖的港灣。願您身體健康，心情愉快，生日快樂！我愛您，爸爸！</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 時間軸 -->
+        <section class="timeline-section">
+            <h2 class="section-title">我們的回憶時光</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2001.08.16</div>
+                    <div class="timeline-content">
+                        <h3>我出生了！</h3>
+                        <p>這一天，我來到了這個世界，成為了您最珍貴的禮物。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2003.03.15</div>
+                    <div class="timeline-content">
+                        <h3>第一次叫爸爸</h3>
+                        <p>記得您當時激動得眼淚都流下來了，那是我們之間最美好的時刻。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2006.09.01</div>
+                    <div class="timeline-content">
+                        <h3>第一天上學</h3>
+                        <p>您牽著我的手送我到學校，告訴我要勇敢面對新環境。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2010.06.20</div>
+                    <div class="timeline-content">
+                        <h3>學會騎腳踏車</h3>
+                        <p>您耐心地在後面扶著我，直到我能獨自騎行。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2013.07.10</div>
+                    <div class="timeline-content">
+                        <h3>第一次露營</h3>
+                        <p>我們一起在山上搭帳篷，您教我看星星和辨認方向。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2016.05.25</div>
+                    <div class="timeline-content">
+                        <h3>畢業典禮</h3>
+                        <p>您坐在台下為我鼓掌，那一刻我感受到了滿滿的驕傲。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2019.08.30</div>
+                    <div class="timeline-content">
+                        <h3>第一份工作</h3>
+                        <p>您給了我很多寶貴的建議，讓我在職場上更有信心。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2021.12.24</div>
+                    <div class="timeline-content">
+                        <h3>聖誕節聚會</h3>
+                        <p>全家人圍在一起，您說這是最好的禮物。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2023.04.15</div>
+                    <div class="timeline-content">
+                        <h3>一起旅行</h3>
+                        <p>我們去了您一直想去的地方，看到您開心的笑容。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2025.07.15</div>
+                    <div class="timeline-content">
+                        <h3>今天 - 您的生日</h3>
+                        <p>希望這個特別的網站能讓您感受到我滿滿的愛意！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 照片輪播 -->
+        <section class="gallery-section">
+            <h2 class="section-title">珍貴的回憶</h2>
+            <div class="photo-carousel">
+                <div class="photo-container" id="photoContainer">
+                    <!-- 照片會動態生成 -->
+                </div>
+                <button class="carousel-btn prev" onclick="changeSlide(-1)">❮</button>
+                <button class="carousel-btn next" onclick="changeSlide(1)">❯</button>
+            </div>
+            <div class="carousel-dots" id="carouselDots">
+                <!-- 圓點會動態生成 -->
+            </div>
+        </section>
+
+        <!-- 鼓勵短句 -->
+        <section class="encouragement-section">
+            <h2 class="section-title" style="color: white;">給爸爸的鼓勵</h2>
+            <div class="encouragement-icons">
+                <div class="encouragement-icon" onclick="showNextEncouragement()">💪</div>
+            </div>
+            <div class="encouragement-text" id="encouragementText">
+                點擊上方圖標看看我想對您說的話 💙
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 寶箱動畫
+        document.getElementById('treasureBox').addEventListener('click', function() {
+            const lid = document.getElementById('boxLid');
+            const overlay = document.getElementById('treasureOverlay');
+            const mainContent = document.getElementById('mainContent');
+            
+            lid.classList.add('treasure-opened');
+            
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    mainContent.classList.add('show');
+                    initAnimations();
+                }, 1000);
+            }, 1000);
+        });
+
+        // 初始化動畫
+        function initAnimations() {
+            initPhotos(); // 初始化照片
+            observeElements();
+            autoSlidePhotos();
+        }
+
+        // 觀察元素進入視窗
+        function observeElements() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.message-card, .timeline-item').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // 照片輪播
+        let currentSlideIndex = 0;
+        let totalSlides = 0;
+        const photoContainer = document.getElementById('photoContainer');
+        const carouselDots = document.getElementById('carouselDots');
+
+        // 初始化照片
+        function initPhotos() {
+            const photoCount = 25; // 預設25張照片，可以調整
+            const photoCaptions = [
+                "和爸爸的第一張合照", "一起出遊的美好時光", "生日派對的歡樂時刻", 
+                "假日的溫馨午後", "最近的全家福", "一起看電影的回憶",
+                "海邊度假的快樂時光", "聖誕節的溫馨時刻", "新年的美好祝福",
+                "畢業典禮的驕傲時刻", "一起運動的健康時光", "料理時間的樂趣",
+                "戶外野餐的悠閒", "音樂會的文藝時光", "登山健行的挑戰",
+                "釣魚的寧靜時光", "遊樂園的歡樂", "博物館的學習之旅",
+                "咖啡廳的午後時光", "書店裡的寧靜", "公園散步的愜意",
+                "夜市美食探險", "溫泉之旅的放鬆", "賞花的浪漫時刻", "最珍貴的回憶"
+            ];
+
+            totalSlides = photoCount;
+
+            // 生成照片
+            for (let i = 1; i <= photoCount; i++) {
+                const slide = document.createElement('div');
+                slide.className = 'photo-slide';
+                
+                // 設置背景圖片路徑
+                slide.style.backgroundImage = `url('photos/image${i}.jpg')`;
+                
+                // 添加佔位符文字（當圖片載入失敗時顯示）
+                const placeholder = document.createElement('div');
+                placeholder.className = 'photo-placeholder';
+                placeholder.textContent = photoCaptions[i-1] || `珍貴回憶 ${i}`;
+                slide.appendChild(placeholder);
+
+                // 圖片載入成功時隱藏佔位符
+                const img = new Image();
+                img.onload = () => {
+                    placeholder.style.display = 'none';
+                };
+                img.onerror = () => {
+                    slide.style.backgroundImage = 'linear-gradient(45deg, #B0E0E6, #87CEEB)';
+                };
+                img.src = `photos/image${i}.jpg`;
+
+                photoContainer.appendChild(slide);
+            }
+
+            // 生成圓點
+            for (let i = 0; i < photoCount; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dot.onclick = () => currentSlide(i + 1);
+                carouselDots.appendChild(dot);
+            }
+        }
+
+        function changeSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
+            if (currentSlideIndex < 0) currentSlideIndex = totalSlides - 1;
+            updateSlide();
+        }
+
+        function currentSlide(n) {
+            currentSlideIndex = n - 1;
+            updateSlide();
+        }
+
+        function updateSlide() {
+            const container = document.getElementById('photoContainer');
+            const dots = document.querySelectorAll('.dot');
+            
+            container.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlideIndex);
+            });
+        }
+
+        function autoSlidePhotos() {
+            setInterval(() => {
+                changeSlide(1);
+            }, 4000);
+        }
+
+        // 鼓勵短句
+        const encouragements = [
+            "未來閃耀，勇敢追夢！您的智慧和經驗是我最寶貴的財富。",
+            "您的堅強一直是我學習的榜樣，繼續保持這份力量！",
+            "愛您的心永遠不變，您是我生命中最重要的人。",
+            "您就像夜空中最亮的星，指引著我前進的方向。",
+            "您是我心中永遠的冠軍，為您感到驕傲！",
+            "歲月雖然在流逝，但您在我心中永遠年輕有活力！",
+            "您教會我的不只是知識，更是做人的道理。",
+            "無論遇到什麼困難，想到您我就有勇氣面對一切。",
+            "您的笑容是我最喜歡的風景，希望您永遠開心。",
+            "謝謝您給我一個溫暖的家，讓我安心長大。"
+        ];
+
+        let currentEncouragementIndex = 0;
+
+        function showNextEncouragement() {
+            const textElement = document.getElementById('encouragementText');
+            textElement.classList.remove('show');
+            
+            setTimeout(() => {
+                textElement.textContent = encouragements[currentEncouragementIndex];
+                textElement.classList.add('show');
+                currentEncouragementIndex = (currentEncouragementIndex + 1) % encouragements.length;
+            }, 200);
+        }
+
+        // 平滑滾動
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
