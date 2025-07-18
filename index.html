@@ -331,6 +331,8 @@
         }
 
         .photo-carousel {
+            aspect-ratio: 16 / 9;
+            width: 100%;
             max-width: 800px;
             margin: 0 auto;
             position: relative;
@@ -345,18 +347,17 @@
         }
 
         .photo-slide {
-            min-width: 100%;
-            height: 400px;
-            background: #ddd;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2em;
-            color: #666;
+            background: #ddd;
             position: relative;
-            background-size: cover;
+            overflow: hidden;
+            background-size: contain; /* ⭐️ 保留比例完整呈現 */
             background-position: center;
             background-repeat: no-repeat;
+            min-width: 100%;
+            height: 500px; /* 可視需要調整高度 */
         }
 
         .photo-slide .photo-placeholder {
@@ -804,16 +805,18 @@
 
         // 鼓勵短句
         const encouragements = [
-            "未來閃耀，勇敢追夢！您的智慧和經驗是我最寶貴的財富。",
-            "您的堅強一直是我學習的榜樣，繼續保持這份力量！",
-            "愛您的心永遠不變，您是我生命中最重要的人。",
-            "您就像夜空中最亮的星，指引著我前進的方向。",
-            "您是我心中永遠的冠軍，為您感到驕傲！",
-            "歲月雖然在流逝，但您在我心中永遠年輕有活力！",
-            "您教會我的不只是知識，更是做人的道理。",
-            "無論遇到什麼困難，想到您我就有勇氣面對一切。",
-            "您的笑容是我最喜歡的風景，希望您永遠開心。",
-            "謝謝您給我一個溫暖的家，讓我安心長大。"
+            "願您心有極光，事業似聚寶盆般蒸蒸日上，生活喜樂安康！",
+            "Everything you work hard for, time will eventually reward you.",
+            "願您步步高升，處處逢貴人；事業順遂，財源滾滾來！",
+            "Life is like rowing upstream—if you’re not moving forward, you’re falling behind.",
+            "The best way to predict the future is to create it.",
+            "With light in your heart, you will always have a path forward.",
+            "Life isn’t about waiting for the storm to pass. It’s about learning to dance in the rain.",
+            "Age is merely the number of years the world has been enjoying you.",
+            "At any age, live life with fire and passion.",
+            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+            "日出東方落於西，人生悲歡不由己，但求心安理得。",
+            "Do what you can, with what you have, where you are."
         ];
 
         let currentEncouragementIndex = 0;
