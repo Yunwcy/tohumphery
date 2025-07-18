@@ -441,13 +441,22 @@
 
         @media (max-width: 768px) {
             .photo-carousel {
-                aspect-ratio: 4 / 3;
+                aspect-ratio: auto; /* 不限制比例 */
+                height: auto;
             }
             .photo-slide {
-                height: 300px; /* 手機版小一點 */
+                height: auto; /* 讓每張圖自由展開 */
+                min-height: 300px;
+                padding: 10px;
             }
-            .carousel-dots { display: none; }
-        }        
+            .photo-slide img {
+                width: auto;
+                height: auto;
+                max-width: 100%;
+                max-height: 80vh;
+                object-fit: contain;
+            }
+        }            
 
         .carousel-btn {
             position: absolute;
