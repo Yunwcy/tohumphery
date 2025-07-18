@@ -410,7 +410,7 @@
         }
 
         .photo-carousel {
-            aspect-ratio: 4 / 3;
+            aspect-ratio: 16 / 9;
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
@@ -455,6 +455,9 @@
           
 
         @media (max-width: 768px) {
+            .photo-carousel {
+                aspect-ratio: 4 / 3;
+            }
             .photo-slide {
                 height: 300px; /* 手機版小一點 */
             }
