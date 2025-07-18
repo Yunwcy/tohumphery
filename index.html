@@ -406,56 +406,48 @@
             padding: 80px 20px;
             background: linear-gradient(135deg, #b6e9f9 0%, #91d0fa 60%, #5ba3de 100%);
         }
-
+        
         .photo-carousel {
-            aspect-ratio: 16 / 9;
             width: 100%;
-            max-width: 1000px; /* ✅ 改大寬度 */
+            max-width: 1000px;
             margin: 0 auto;
             position: relative;
             overflow: hidden;
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
-
+        
         .photo-container {
             display: flex;
             transition: transform 0.5s ease;
         }
-
+        
         .photo-slide {
             display: flex;
-            align-items: center;  /* ✅ 垂直置中 */
-            justify-content: center; /* ✅ 水平置中 */
-            background: transparent;
-            position: relative;
-            overflow: hidden;
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
+            align-items: center;
+            justify-content: center;
             min-width: 100%;
-            height: 600px; /* ✅ 改高 */
+            background: #f0f0f0;
         }
-
-        .photo-slide .photo-placeholder {
-            background: rgba(255,255,255,0.9);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            color: #4682B4;
+        
+        .photo-slide img {
+            width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: contain;
+            border-radius: 20px;
         }
-
+        
         /* 手機版 */
         @media (max-width: 768px) {
-            .photo-slide {
-                height: 350px; /* ✅ 手機也大一點 */
+            .photo-slide img {
+                max-height: 350px;
             }
             .photo-carousel {
-                max-width: 95%; /* ✅ 手機版略微留白 */
+                max-width: 95%;
             }
-            .carousel-dots { display: none; } /* ✅ 刪除小點 */
-        }
+            .carousel-dots { display: none; }
+        }        
         
 
         .carousel-btn {
