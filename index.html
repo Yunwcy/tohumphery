@@ -427,7 +427,7 @@
             align-items: center;
             justify-content: center;
             min-width: 100%;
-            background: #f0f0f0;
+            background: transparent;
         }
         
         .photo-slide img {
@@ -436,7 +436,7 @@
             max-height: 600px;
             object-fit: contain;
             border-radius: 20px;
-        }
+        }        
         
         /* 手機版 */
         @media (max-width: 768px) {
@@ -910,7 +910,11 @@
                 slide.className = 'photo-slide';
                 
                 // 設置背景圖片路徑
-                slide.style.backgroundImage = `url('photos/image${i}.jpg')`;
+                const img = document.createElement('img');
+                img.src = `photos/image${i}.jpg`;
+                img.alt = photoCaptions[i-1] || `珍貴回憶 ${i}`;
+                slide.appendChild(img);
+
                 
                 // 添加佔位符文字（當圖片載入失敗時顯示）
                 const placeholder = document.createElement('div');
@@ -919,7 +923,7 @@
                 slide.appendChild(placeholder);
 
                 // 圖片載入成功時隱藏佔位符
-                const img = new Image();
+                img = new Image();
                 img.onload = () => {
                     placeholder.style.display = 'none';
                 };
