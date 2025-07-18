@@ -877,13 +877,16 @@
 
         // 照片輪播
         let currentSlideIndex = 0;
-        let totalSlides = 0;
+        let totalSlides = 42;
         const photoContainer = document.getElementById('photoContainer');
         const carouselDots = document.getElementById('carouselDots');
-        let autoSlideTimer;  // 控制 setInterval
+        let autoSlideTimer = null;  // 控制 setInterval
 
         // 初始化照片
         function initPhotos() {
+            photoContainer.innerHTML = '';
+            carouselDots.innerHTML = '';
+
             const photoCount = 42; // 預設25張照片，可以調整
             const photoCaptions = [
                 "我的童年寫真", "和妹妹拍照", "你帶我們去買禮服", //1-3
@@ -904,17 +907,14 @@
 
             totalSlides = photoCount;
 
-            // 設定 container 寬度
-            photoContainer.style.width = `${photoCount * 100}%`;
-
             // 生成照片
-            for (let i = 1; i <= photoCount; i++) {
+            for (let i = 1; i <= totalSlides; i++) {
                 const slide = document.createElement('div');
                 slide.className = 'photo-slide';
-
+        
                 const img = document.createElement('img');
                 img.src = `photos/image${i}.jpg`;
-                img.alt = photoCaptions[i - 1] || `珍貴回憶 ${i}`;
+                img.alt = `珍貴回憶 ${i}`;
                 img.onerror = function() {
                     img.style.display = 'none';
                     const placeholder = document.createElement('div');
@@ -924,31 +924,28 @@
         
                 slide.appendChild(img);
                 photoContainer.appendChild(slide);
-            }
-
-            // 生成圓點
-            carouselDots.innerHTML = ''; // 清空防止重複
-            for (let i = 0; i < photoCount; i++) {
+        
+                // 生成圓點
                 const dot = document.createElement('span');
                 dot.className = 'dot';
-                if (i === 0) dot.classList.add('active');
+                if (i === 1) dot.classList.add('active');
                 dot.onclick = () => {
-                    currentSlide(i + 1);
+                    currentSlide(i - 1);
                     restartAutoSlide();
                 };
                 carouselDots.appendChild(dot);
             }
-
+        
             updateSlide();
         }
 
-        function changeSlide(direction) {
-            currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+        function currentSlide(n) {
+            currentSlideIndex = (n + totalSlides) % totalSlides;
             updateSlide();
         }
         
-        function currentSlide(n) {
-            currentSlideIndex = (n - 1 + totalSlides) % totalSlides;
+        function changeSlide(direction) {
+            currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
             updateSlide();
         }
         
@@ -960,6 +957,7 @@
         }
         
         function autoSlidePhotos() {
+            clearInterval(autoSlideTimer);
             autoSlideTimer = setInterval(() => changeSlide(1), 4000);
         }
         
@@ -967,6 +965,9 @@
             clearInterval(autoSlideTimer);
             autoSlidePhotos();
         }
+        
+        initPhotos();
+        autoSlidePhotos();
 
         // 鼓勵短句
         const encouragements = [
