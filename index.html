@@ -51,6 +51,7 @@
             left: 0;
             width: 100%;
             height: 100%;
+            /*background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);*/
             background: linear-gradient(135deg, rgba(45, 55, 72, 0.85) 0%, rgba(26, 32, 44, 0.85) 100%);
             z-index: 1000;
             display: flex;
@@ -151,190 +152,59 @@
             100% { transform: rotateX(-120deg); }
         }
 
-        /* 光束特效 */
+        /* 彩帶 */
         .light-burst {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 400px;
-            height: 400px;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0;
-            z-index: 1001;
             pointer-events: none;
+            z-index: 1001;
         }
-
-        .light-burst.active {
-            pointer-events: auto;
-        }
-
+        
         .light-ray {
             position: absolute;
-            background: linear-gradient(to right, transparent, #FFD700, transparent);
-            transform-origin: center;
-            opacity: 0;
-        }
-
-        .light-ray:nth-child(1) {
             width: 300px;
             height: 4px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(0deg);
+            background: linear-gradient(to right, transparent, #FFD700, transparent);
+            transform: translate(-50%, -50%) rotate(var(--angle));
+            opacity: 0;
         }
-
-        .light-ray:nth-child(2) {
-            width: 200px;
-            height: 3px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-        }
-
-        .light-ray:nth-child(3) {
-            width: 250px;
-            height: 3px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(90deg);
-        }
-
-        .light-ray:nth-child(4) {
-            width: 180px;
-            height: 3px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(135deg);
-        }
-
-        .light-ray:nth-child(5) {
-            width: 220px;
-            height: 4px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(180deg);
-        }
-
-        .light-ray:nth-child(6) {
-            width: 160px;
-            height: 3px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(225deg);
-        }
-
-        .light-ray:nth-child(7) {
-            width: 200px;
-            height: 3px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(270deg);
-        }
-
-        .light-ray:nth-child(8) {
-            width: 170px;
-            height: 3px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(315deg);
-        }
-
+        
         .light-burst.active .light-ray {
             animation: lightBurst 1.5s ease-out forwards;
         }
-
+        
         @keyframes lightBurst {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(0);
-            }
-            30% {
-                opacity: 1;
-                transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(1.2);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(2);
-            }
+            0% { opacity: 0; transform: scale(0.5) translate(-50%, -50%) rotate(var(--angle)); }
+            50% { opacity: 1; transform: scale(1.2) translate(-50%, -50%) rotate(var(--angle)); }
+            100% { opacity: 0; transform: scale(2) translate(-50%, -50%) rotate(var(--angle)); }
         }
-
-        /* 彩帶飄落特效 */
+        
         .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 999;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 1002;
             overflow: hidden;
         }
-
+        
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #FF6B6B;
+            width: 10px; height: 10px;
+            background: #FFD700;
+            border-radius: 50%;
             top: -10px;
             opacity: 0;
         }
-
+        
         .confetti.active {
             animation: confettiFall 3s linear forwards;
         }
-
-        .confetti:nth-child(odd) {
-            background: #4ECDC4;
-            width: 8px;
-            height: 15px;
-            border-radius: 0;
-        }
-
-        .confetti:nth-child(3n) {
-            background: #45B7D1;
-            width: 6px;
-            height: 20px;
-            border-radius: 3px;
-        }
-
-        .confetti:nth-child(4n) {
-            background: #96CEB4;
-            width: 12px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .confetti:nth-child(5n) {
-            background: #FFEAA7;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .confetti:nth-child(6n) {
-            background: #DDA0DD;
-            width: 10px;
-            height: 15px;
-            border-radius: 2px;
-        }
-
-        .confetti:nth-child(7n) {
-            background: #98D8C8;
-            width: 14px;
-            height: 6px;
-            border-radius: 3px;
-        }
-
+        
         @keyframes confettiFall {
-            0% {
-                opacity: 1;
-                transform: translateY(-10px) rotate(0deg);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(100vh) rotate(720deg);
-            }
+            0% { opacity: 1; transform: translateY(-10px) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
         }
+        
 
         /* 主要內容 */
         .main-content {
@@ -706,9 +576,7 @@
     </style>
 </head>
 <body>
-    <!-- 彩帶容器 -->
-    <div class="confetti-container" id="confettiContainer"></div>
-
+    
     <!-- 寶箱動畫 -->
     <div class="treasure-overlay" id="treasureOverlay">
         <div>
@@ -720,20 +588,24 @@
                 <div class="sparkle"></div>
                 <div class="sparkle"></div>
             </div>
-            <!-- 光束特效 -->
-            <div class="light-burst" id="lightBurst">
-                <div class="light-ray"></div>
-                <div class="light-ray"></div>
-                <div class="light-ray"></div>
-                <div class="light-ray"></div>
-                <div class="light-ray"></div>
-                <div class="light-ray"></div>
-                <div class="light-ray"></div>
-                <div class="light-ray"></div>
-            </div>
             <div class="click-hint">點擊寶箱打開驚喜！</div>
         </div>
     </div>
+    <!-- 光束特效 -->
+    <div class="light-burst" id="lightBurst">
+        <div class="light-ray" style="--angle:0deg;"></div>
+        <div class="light-ray" style="--angle:45deg;"></div>
+        <div class="light-ray" style="--angle:90deg;"></div>
+        <div class="light-ray" style="--angle:135deg;"></div>
+        <div class="light-ray" style="--angle:180deg;"></div>
+        <div class="light-ray" style="--angle:225deg;"></div>
+        <div class="light-ray" style="--angle:270deg;"></div>
+        <div class="light-ray" style="--angle:315deg;"></div>
+    </div>
+
+    <!-- 彩帶特效 -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
 
     <!-- 主要內容 -->
     <div class="main-content" id="mainContent">
@@ -941,6 +813,38 @@
                 observer.observe(el);
             });
         }
+
+        //光束與彩帶效果
+        document.getElementById('treasureBox').addEventListener('click', function() {
+            const lid = document.getElementById('boxLid');
+            const overlay = document.getElementById('treasureOverlay');
+            const mainContent = document.getElementById('mainContent');
+            const lightBurst = document.getElementById('lightBurst');
+            const confettiContainer = document.getElementById('confettiContainer');
+        
+            lid.classList.add('treasure-opened');
+            lightBurst.classList.add('active');
+        
+            // 生成彩帶
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = `hsl(${Math.random()*360}, 100%, 70%)`;
+                confettiContainer.appendChild(confetti);
+                setTimeout(() => confetti.classList.add('active'), 50);
+            }
+        
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    mainContent.classList.add('show');
+                    initAnimations();
+                }, 1000);
+            }, 2000);
+        });
+        
 
         // 照片輪播
         let currentSlideIndex = 0;
