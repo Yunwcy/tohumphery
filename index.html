@@ -164,32 +164,28 @@
         /* 光束與彩帶 */
         .light-burst {
             position: absolute;
-            top: 50%;
+            bottom: -50px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
-            filter: blur(40px); /* 模糊讓光暈更柔和 */
-        }
-        
-        .light-ray {
-            position: absolute;
+            transform: translateX(-50%);
             width: 300px;
             height: 300px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,215,0,0.7) 0%, rgba(255,215,0,0) 70%);
+            background: radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,215,0,0) 70%);
+            filter: blur(40px);
             opacity: 0;
+            z-index: -1;
         }
         
-        .light-burst.active .light-ray {
+        .light-burst.active {
             animation: lightPulse 4s ease-out infinite;
         }
         
         @keyframes lightPulse {
-            0% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 0.8; transform: scale(1.3); }
-            100% { opacity: 0; transform: scale(2); }
+            0% { opacity: 0; transform: translateX(-50%) scale(0.5); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(1.3); }
+            100% { opacity: 0; transform: translateX(-50%) scale(2); }
         }
+        
         
         
         .confetti-container {
@@ -608,21 +604,10 @@
     <!-- 寶箱特效 -->
     <div class="treasure-overlay" id="treasureOverlay">
         <div class="treasure-wrapper" style="position: relative; display: flex; flex-direction: column; align-items: center;">
-            
-            <!-- 光束 -->
-            <div class="light-burst" id="lightBurst">
-                <div class="light-ray" style="--angle:0deg;"></div>
-                <div class="light-ray" style="--angle:45deg;"></div>
-                <div class="light-ray" style="--angle:90deg;"></div>
-                <div class="light-ray" style="--angle:135deg;"></div>
-                <div class="light-ray" style="--angle:180deg;"></div>
-                <div class="light-ray" style="--angle:225deg;"></div>
-                <div class="light-ray" style="--angle:270deg;"></div>
-                <div class="light-ray" style="--angle:315deg;"></div>
-            </div>
     
             <!-- 寶箱 -->
             <div class="treasure-box" id="treasureBox">
+                <div class="light-burst" id="lightBurst"></div>
                 <div class="box-lid" id="boxLid"></div>
                 <div class="box-base"></div>
                 <div class="box-lock"></div>
@@ -630,7 +615,8 @@
                 <div class="sparkle"></div>
                 <div class="sparkle"></div>
             </div>
-    
+            
+
             <div class="click-hint">點擊寶箱打開驚喜！</div>
         </div>
     
