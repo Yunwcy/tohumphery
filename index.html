@@ -416,21 +416,20 @@
             overflow: hidden;
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            position: relative;
         }
         
         .photo-container {
             display: flex;
-            width: auto; /* 由JS控制寬度 */
             transition: transform 0.5s ease;
+            width: 100%;
         }
         
         .photo-slide {
-            flex-shrink: 0;
-            width: 100%;
+            flex: 0 0 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #e0f7fa;
         }
         
         .photo-slide img {
@@ -439,8 +438,6 @@
             object-fit: contain;
             border-radius: 20px;
         }
-        
-          
 
         @media (max-width: 768px) {
             .photo-carousel {
@@ -914,15 +911,13 @@
             for (let i = 1; i <= photoCount; i++) {
                 const slide = document.createElement('div');
                 slide.className = 'photo-slide';
-                slide.style.width = `${100 / photoCount}%`;
-        
+
                 const img = document.createElement('img');
                 img.src = `photos/image${i}.jpg`;
                 img.alt = photoCaptions[i - 1] || `珍貴回憶 ${i}`;
                 img.onerror = function() {
                     img.style.display = 'none';
                     const placeholder = document.createElement('div');
-                    placeholder.className = 'photo-placeholder';
                     placeholder.textContent = img.alt;
                     slide.appendChild(placeholder);
                 };
@@ -943,32 +938,29 @@
                 };
                 carouselDots.appendChild(dot);
             }
+
+            updateSlide();
         }
 
         function changeSlide(direction) {
-            currentSlideIndex += direction;
-            if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
-            if (currentSlideIndex < 0) currentSlideIndex = totalSlides - 1;
+            currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
             updateSlide();
         }
-
+        
         function currentSlide(n) {
-            currentSlideIndex = n - 1;
+            currentSlideIndex = (n - 1 + totalSlides) % totalSlides;
             updateSlide();
         }
-
+        
         function updateSlide() {
-            const offset = (100 / totalSlides) * currentSlideIndex;
-            photoContainer.style.transform = `translateX(-${offset}%)`;
+            photoContainer.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
             document.querySelectorAll('.dot').forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSlideIndex);
             });
         }
-
+        
         function autoSlidePhotos() {
-            autoSlideTimer = setInterval(() => {
-                changeSlide(1);
-            }, 4000);
+            autoSlideTimer = setInterval(() => changeSlide(1), 4000);
         }
         
         function restartAutoSlide() {
