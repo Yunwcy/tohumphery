@@ -404,51 +404,56 @@
         /* 照片輪播 */
         .gallery-section {
             padding: 80px 20px;
+            /*background: linear-gradient(135deg, #B0E0E6 0%, #4682B4 100%);*/
             background: linear-gradient(135deg, #b6e9f9 0%, #91d0fa 60%, #5ba3de 100%);
+
         }
-        
+
         .photo-carousel {
+            aspect-ratio: 16 / 9;
             width: 100%;
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
             position: relative;
             overflow: hidden;
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
-        
+
         .photo-container {
             display: flex;
             transition: transform 0.5s ease;
         }
-        
+
         .photo-slide {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-width: 100%;
             background: transparent;
+            position: relative;
+            overflow: hidden;
+            background-size: contain; /* ⭐️ 保留比例完整呈現 */
+            background-position: center;
+            background-repeat: no-repeat;
+            min-width: 100%;
+            height: 500px; /* 可視需要調整高度 */
         }
-        
-        .photo-slide img {
-            width: 100%;
-            height: auto;
-            max-height: 600px;
-            object-fit: contain;
-            border-radius: 20px;
-        }        
-        
-        /* 手機版 */
+
+        .photo-slide .photo-placeholder {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #4682B4;
+        }
+
         @media (max-width: 768px) {
-            .photo-slide img {
-                max-height: 350px;
-            }
-            .photo-carousel {
-                max-width: 95%;
+            .photo-slide {
+                height: 250px;
             }
             .carousel-dots { display: none; }
         }        
-        
 
         .carousel-btn {
             position: absolute;
@@ -910,11 +915,7 @@
                 slide.className = 'photo-slide';
                 
                 // 設置背景圖片路徑
-                const img = document.createElement('img');
-                img.src = `photos/image${i}.jpg`;
-                img.alt = photoCaptions[i-1] || `珍貴回憶 ${i}`;
-                slide.appendChild(img);
-
+                slide.style.backgroundImage = `url('photos/image${i}.jpg')`;
                 
                 // 添加佔位符文字（當圖片載入失敗時顯示）
                 const placeholder = document.createElement('div');
@@ -923,7 +924,7 @@
                 slide.appendChild(placeholder);
 
                 // 圖片載入成功時隱藏佔位符
-                img = new Image();
+                const img = new Image();
                 img.onload = () => {
                     placeholder.style.display = 'none';
                 };
